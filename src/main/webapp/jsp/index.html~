@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http:www.w3.org/TR/1999/PR-xhtml1-19991210/DTD/xhtml-strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="../styles/main.css" type="text/css" />
+<title>roverll's blog</title>
+</head>
+<body>
+    <div id="container">
+        <div id="nav">
+            <ul>
+                <li>home</li>
+                <li>blogs</li>
+                <li>message</li>
+                <li>about me</li>
+            </ul>
+        </div>
+        <div>
+            <div id="slider">slider</div>
+            <div id="main">
+            	<div></div>
+			</div>
+            <div id="tag">tag</div>
+        </div>
+ 		<div id="comment">comment</div>
+ 	</div>
+ 	<script type="text/javascript" src="../js/jquery-1.7.js"></script>
+</body>
+</html>

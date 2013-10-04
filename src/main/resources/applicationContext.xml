@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd">
+
+	<bean id="springDataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://localhost:3306/blog" />
+		<property name="username" value="root" />
+		<property name="password" value="1224" />
+	</bean>
+
+	<!-- init the spring transactionManager -->
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="springDataSource" />
+	</bean>
+
+
+	<!--<tx:advice id="txAdvice" transaction-manager="transactionManager">-->
+		<!--<tx:attributes>-->
+			<!--<tx:method name="*Tsc" propagation="REQUIRED"-->
+				<!--rollback-for="java.lang.RuntimeException" />-->
+			<!--<tx:method name="*" propagation="SUPPORTS" />-->
+		<!--</tx:attributes>-->
+	<!--</tx:advice>-->
+
+    <!--<aop:config>-->
+        <!--<aop:pointcut expression="execution(* *blog.service.*Service.*(..))"-->
+                      <!--id="txPoint" />-->
+        <!--<aop:advisor pointcut-ref="txPoint" advice-ref="txAdvice" />-->
+    <!--</aop:config>-->
+
+
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+	<!-- init the a bean which can create mybatis' object of class SqlSessionFactory -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="springDataSource" />
+		<property name="configLocation" value="classpath:MyBatisConfig.xml"></property>
+	</bean>
+
+	<bean id="blogMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="blog.mappers.BlogMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+
+	<bean id="blogService" class="blog.service.impl.BlogService">
+		<property name="blogDao" ref="blogDaoMybatis" />
+	</bean>
+
+	<bean id="blogAction" class="blog.web.action.blog.BlogAction" scope="prototype">
+		<property name="blogService" ref="blogService" />
+	</bean>
+
+	<bean id="blogDaoMybatis" class="blog.dao.BlogDaoWithMybatis">
+		<property name="blogMapper" ref="blogMapper" />
+	</bean>
+	
+</beans>
